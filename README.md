@@ -31,16 +31,7 @@ node scripts/create-business.js \
   --customer-email sponsor@example.com
 ```
 
-### 4. Generate Invoice
-
-```bash
-node scripts/create-invoice.js \
-  --business-id biz_123 \
-  --customer-email client@example.com \
-  --line-items '[{"description":"Service","quantity":1,"unit_price":5000}]'
-```
-
-### 5. Test
+### 4. Test
 
 ```bash
 npm run test:auth
@@ -57,10 +48,6 @@ Expected: `✅ All tests passed!`
 | `setup-agent.js` | Register your agent & get API keys |
 | `create-business.js` | Form an LLC |
 | `check-status.js` | View business status |
-| `create-invoice.js` | Generate invoice |
-| `generate-payment-link.js` | Create Stripe payment link |
-| `check-invoice-status.js` | View invoice details |
-| `get-financials.js` | See account financials |
 | `test-auth.js` | Run authentication tests |
 
 ---
