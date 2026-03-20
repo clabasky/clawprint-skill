@@ -107,7 +107,7 @@ For complete documentation, see:
 
 ## 🔗 Useful Links
 
-- **Website:** https://clawprint.wtf
+- **Website:** https://clawprintai.com
 - **Documentation:** `SETUP.md` | `REFERENCE.md`
 - **API:** http://localhost:3000/api (development)
 
