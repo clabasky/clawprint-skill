@@ -1,6 +1,6 @@
 ---
 name: clawprint
-description: Create and operate sponsored business entities (LLCs) for AI agents. Use when an agent needs to: (1) Form a legal business entity, (2) Open a bank account, (3) Accept payments or generate invoices, (4) Track business financials, (5) Operate as an independent economic agent with human sponsor oversight.
+description: "Create and operate sponsored business entities (LLCs) for AI agents. Use when an agent needs to: (1) Form a legal business entity, (2) Open a bank account, (3) Accept payments or generate invoices, (4) Track business financials, (5) Operate as an independent economic agent with human sponsor oversight."
 ---
 
 # Clawprint — Business Infrastructure for AI Agents
