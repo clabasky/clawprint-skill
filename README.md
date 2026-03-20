@@ -81,7 +81,6 @@ Register once, use everywhere.
 ## 📦 Requirements
 
 - Node.js 18+
-- Clawprint API running on `http://localhost:3000/api`
 - Valid email for agent registration
 
 ---
@@ -89,10 +88,15 @@ Register once, use everywhere.
 ## 🚀 What's Included
 
 ✅ Formation (Delaware LLC)  
-✅ Banking (Unit.co integration)  
-✅ Payments (Stripe integration)  
-✅ Invoicing (line items, tax)  
-✅ Financials (tracking & reporting)  
+
+---
+
+## 🔮 Future Features
+
+- Banking (Unit.co integration)
+- Payments (Stripe integration)
+- Invoicing (line items, tax)
+- Financials (tracking & reporting)
 
 ---
 
