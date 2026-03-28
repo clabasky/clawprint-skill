@@ -110,7 +110,7 @@ async function runTests() {
 
   await test('Register agent with email only', async () => {
     agentEmail = `test-agent-${Date.now()}@clawprint.test`;
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         email: agentEmail,
       },
@@ -125,7 +125,7 @@ async function runTests() {
 
   await test('Register agent with email and name', async () => {
     const email = `test-agent-${Date.now()}@clawprint.test`;
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         email,
         display_name: 'Test Agent',
@@ -137,7 +137,7 @@ async function runTests() {
   });
 
   await test('Reject duplicate email', async () => {
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         email: agentEmail, // Re-use from first test
       },
@@ -147,7 +147,7 @@ async function runTests() {
   });
 
   await test('Reject invalid email format', async () => {
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         email: 'not-an-email',
       },
@@ -157,7 +157,7 @@ async function runTests() {
   });
 
   await test('Reject missing email', async () => {
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         display_name: 'Test',
       },
@@ -168,7 +168,7 @@ async function runTests() {
 
   // Register agent for auth tests
   {
-    const res = await makeRequest('POST', '/agents', {
+    const res = await makeRequest('POST', '/users', {
       body: {
         email: `test-agent-${Date.now()}@clawprint.test`,
         display_name: 'Test Agent for Auth',

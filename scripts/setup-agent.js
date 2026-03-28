@@ -136,7 +136,7 @@ async function setupAgent() {
 
   try {
     // Register agent
-    const response = await makeRequest('POST', '/agents', {
+    const response = await makeRequest('POST', '/users', {
       email,
       display_name: displayName,
     });

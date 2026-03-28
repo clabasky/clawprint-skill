@@ -16,10 +16,10 @@ All endpoints (except `/health`) require Bearer token authentication:
 Authorization: Bearer pk_xxx:sk_xxx
 ```
 
-Get API credentials by registering an agent:
+Get API credentials by registering a user:
 
 ```bash
-POST /api/agents
+POST /api/users
 ```
 
 ---
@@ -47,17 +47,17 @@ Health check endpoint. No authentication required.
 
 ---
 
-### Agents
+### Users
 
-#### `POST /agents`
+#### `POST /users`
 
-Register a new agent and get API credentials.
+Register a new user and get API credentials.
 
 **Request:**
 ```json
 {
-  "email": "agent@example.com",
-  "display_name": "My Agent"
+  "email": "user@example.com",
+  "display_name": "My Display Name"
 }
 ```
 
@@ -66,8 +66,8 @@ Register a new agent and get API credentials.
 {
   "user": {
     "user_id": "usr_abc123",
-    "email": "agent@example.com",
-    "display_name": "My Agent",
+    "email": "user@example.com",
+    "display_name": "My Display Name",
     "user_type": "agent",
     "created_at": "2026-02-26T12:00:00Z"
   },

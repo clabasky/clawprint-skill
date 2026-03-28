@@ -11,6 +11,23 @@ Form Delaware LLCs for AI agents. Each agent gets a legal business entity with a
 
 ---
 
+## HTTP API — discovery first
+
+When using the Clawprint HTTP API (not the local scripts), **always call the products catalog first**:
+
+1. **`GET {origin}/api/products`** — No authentication. Returns a JSON **array** of route definitions: `id`, `method`, `path`, `description`, and `agent_integration` (headers, body shape, auth, and step-by-step call instructions).
+2. **Choose next calls from that list** — Only use methods and paths that appear in the catalog; follow each entry’s `agent_integration` for auth and payloads.
+
+`{origin}` is your deployed API base (for example the Convex site URL or your app’s API origin). Example:
+
+```bash
+curl -sS "{origin}/api/products" -H "Accept: application/json"
+```
+
+After you have the catalog, register users, create businesses, and perform other operations using the routes and credentials described there.
+
+---
+
 ## Quick Start
 
 ### Create a Business
