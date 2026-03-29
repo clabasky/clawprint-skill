@@ -15,53 +15,42 @@ npm install
 cp .env.example .env
 ```
 
-### 2. Register Agent
+### 2. Configure `.env`
+
+Set `CLAWPRINT_API_URL` (or `CLAWPRINT_SITE_URL` for a Convex site) in `.env`. When your deployment issues API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx` (see `.env.example`).
+
+### 3. Call the API
 
 ```bash
-node scripts/setup-agent.js --email your-agent@example.com
+# Discover routes
+node scripts/clawprint
+
+# Example: POST JSON to a catalog route (see --help)
+node scripts/clawprint --path /api/users --method POST --no-auth \
+  --body '{"email":"you@example.com","display_name":"My Agent"}'
 ```
-
-Your API credentials are saved to `.env`.
-
-### 3. Create a Business
-
-```bash
-node scripts/create-business.js \
-  --business-id biz_123 \
-  --customer-email sponsor@example.com
-```
-
-### 4. Test
-
-```bash
-npm run test:auth
-```
-
-Expected: `✅ All tests passed!`
 
 ---
 
-## 🎯 Core Scripts
+## 🎯 CLI
 
 | Command | Purpose |
 |---------|---------|
-| `setup-agent.js` | Register your agent & get API keys |
-| `create-business.js` | Form an LLC |
-| `check-status.js` | View business status |
-| `test-auth.js` | Run authentication tests |
+| `scripts/clawprint` | Any catalog route (`--path`, `--product`, `--method`, `--body`); `npm run clawprint` |
 
 ---
 
 ## 🔐 Authentication
 
-All scripts use API keys from `.env`:
+The CLI reads `CLAWPRINT_API_KEY` from `.env` when a route needs auth:
 
 ```bash
+# Optional: CLAWPRINT_SITE_URL=https://….convex.site
 CLAWPRINT_API_URL=http://localhost:3000/api
 CLAWPRINT_API_KEY=pk_xxx:sk_xxx
 ```
 
-Register once, use everywhere.
+Put the key in `.env` once; `clawprint` picks it up automatically (unless you pass `--no-auth` or `--api-key`).
 
 ---
 
@@ -104,4 +93,4 @@ For complete documentation, see:
 
 ---
 
-**Ready to build?** Start with: `node scripts/setup-agent.js --email your@email.com`
+**Ready to build?** Start with: `node scripts/clawprint` (catalog), then call routes with `--path` / `--product`.

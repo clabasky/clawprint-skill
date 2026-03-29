@@ -8,11 +8,11 @@
 
 ### Create Business
 
+**Via CLI** (use the route from `node scripts/clawprint` / your catalog):
+
 ```bash
-node scripts/create-business.js \
-  --business-id biz_123 \
-  --customer-email sponsor@example.com \
-  --customer-name "Sponsor Name"
+node scripts/clawprint --method POST --path /api/businesses \
+  --body '{"legal_name":"My Business LLC","sponsor_email":"sponsor@example.com"}'
 ```
 
 **Via API:**
@@ -29,89 +29,13 @@ curl -X POST http://localhost:3000/api/businesses \
 ### Get Business
 
 ```bash
-node scripts/check-status.js --business-id biz_123
+node scripts/clawprint --method GET --path /api/businesses/biz_123
 ```
 
 **Via API:**
 ```bash
 curl http://localhost:3000/api/businesses/biz_123 \
   -H "Authorization: Bearer $API_KEY"
-```
-
-### Get Financials
-
-```bash
-node scripts/get-financials.js --business-id biz_123 --period month
-```
-
-**Periods:** `week`, `month`, `year`, `all`
-
----
-
-## Invoice Operations
-
-### Create Invoice
-
-```bash
-node scripts/create-invoice.js \
-  --business-id biz_123 \
-  --customer-email client@example.com \
-  --line-items '[
-    {"description":"Service","quantity":1,"unit_price":5000,"tax_rate":10},
-    {"description":"Fee","quantity":1,"unit_price":500}
-  ]'
-```
-
-**Via API:**
-```bash
-curl -X POST http://localhost:3000/api/invoices \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "business_id": "biz_123",
-    "customer_email": "client@example.com",
-    "customer_name": "Client Name",
-    "line_items": [
-      {"description":"Service","quantity":1,"unit_price":5000}
-    ]
-  }'
-```
-
-### Generate Payment Link
-
-```bash
-node scripts/generate-payment-link.js --invoice-id inv_123
-```
-
-Returns shareable Stripe payment link.
-
-### Check Invoice Status
-
-```bash
-node scripts/check-invoice-status.js --invoice-id inv_123
-```
-
----
-
-## Testing
-
-### Test Authentication
-
-```bash
-npm run test:auth
-```
-
-Runs 24 comprehensive tests validating:
-- Agent registration
-- API key generation
-- Bearer token validation
-- Endpoint protection
-- Full workflows
-
-### Run All Tests
-
-```bash
-npm run test:all
 ```
 
 ---
@@ -158,15 +82,6 @@ CLAWPRINT_API_URL=http://localhost:3000/api
 ### Business Status
 `pending` | `forming` | `active` | `suspended` | `dissolved`
 
-### Invoice Status
-`draft` | `sent` | `viewed` | `paid` | `overdue` | `cancelled` | `refunded`
-
-### Line Item Type
-`service` | `product` | `fee` | `other`
-
-### Currency
-`USD` | `EUR` | `GBP` | `CAD` | `AUD`
-
 ---
 
 ## Rate Limiting
@@ -182,12 +97,36 @@ X-RateLimit-Reset: 1708114800
 
 ---
 
+## Programmatic use (Node.js)
+
+Use **`lib/clawprint-http.js`** from this repo (same URL rules and auth as the CLI):
+
+```javascript
+const { clawprintRequest, buildClawprintUrl } = require('./lib/clawprint-http');
+
+// Example: catalog
+const { body } = await clawprintRequest({
+  method: 'GET',
+  path: '/api/products',
+  auth: false,
+});
+console.log(body);
+
+// Example: authenticated call
+const res = await clawprintRequest({
+  method: 'GET',
+  path: '/api/businesses',
+});
+console.log(res.body);
+```
+
+`clawprintRequest` reads `CLAWPRINT_API_URL` / `CLAWPRINT_SITE_URL` and `CLAWPRINT_API_KEY` from the environment unless you pass `apiKey` or `auth: false`.
+
+---
+
 ## Tips
 
-- All scripts use credentials from `.env` automatically
-- Line items support custom tax rates
-- Invoices accept multiple line items
-- Payment links valid for 90 days
+- The `clawprint` CLI uses credentials from `.env` when present (`CLAWPRINT_API_KEY`)
 - Requests are logged for audit trail
 
 ---

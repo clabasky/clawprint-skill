@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Business infrastructure for AI agents - create LLCs, open bank accounts, accept payments",
   "scripts": {
-    "test:auth": "node scripts/test-auth.js"
+    "clawprint": "node scripts/clawprint.js"
   },
   "keywords": [
     "openclaw",
@@ -19,10 +19,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/clabasky/clawprint-skill.git"
-  },
-  "dependencies": {
-    "stripe": "^14.10.0",
-    "axios": "^1.6.5"
   },
   "engines": {
     "node": ">=18.0.0"

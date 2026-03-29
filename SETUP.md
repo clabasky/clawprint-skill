@@ -12,66 +12,55 @@ npm install
 cp .env.example .env
 ```
 
-## Step 2: Register Your Agent
+## Step 2: Environment
+
+Edit `.env` and set either:
+
+- **`CLAWPRINT_SITE_URL`** — deployment origin (e.g. `https://….convex.site`), or  
+- **`CLAWPRINT_API_URL`** — API root including `/api` (default in `.env.example`).
+
+If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
+
+Optional waitlist / signup (body fields depend on your catalog):
 
 ```bash
-node scripts/setup-agent.js --email your-agent@example.com --name "My Agent"
+node scripts/clawprint --product register_user --no-auth \
+  --body '{"email":"you@example.com","display_name":"My Agent"}'
 ```
 
-**Output:**
-```
-✅ Agent registered successfully!
-
-📋 API Credentials:
-   Public Key: pk_abc123xyz...
-   Secret Key: sk_def456uvw...
-
-💾 Credentials saved to: .env
-```
-
-💡 Your `.env` now contains your API key. It's automatically loaded in all scripts.
-
-## Step 3: Test
+## Step 3: Verify
 
 ```bash
-node scripts/test-auth.js
+node scripts/clawprint
 ```
 
-**Expected:** `✅ All tests passed! (24/24)`
+You should see JSON from `GET /api/products` (the route catalog). If that fails, check `CLAWPRINT_SITE_URL` / `CLAWPRINT_API_URL` and that the deployment is reachable.
 
 ---
 
 ## Commands
 
-### Create Business
+All HTTP calls go through one entry point:
 
 ```bash
-node scripts/create-business.js \
-  --business-id biz_123 \
-  --customer-email client@example.com \
-  --customer-name "Client Name"
+node scripts/clawprint --help
 ```
 
-### Check Status
+Examples:
 
 ```bash
-node scripts/check-status.js --business-id biz_123
+# Route catalog (default; no args)
+node scripts/clawprint
+
+# Waitlist / user signup (adjust body to match your deployment)
+node scripts/clawprint --product register_user --no-auth \
+  --body '{"email":"you@example.com","display_name":"My Agent"}'
+
+# Authenticated GET (uses CLAWPRINT_API_KEY from .env)
+node scripts/clawprint --method GET --path /api/businesses
 ```
 
-### Create Invoice
-
-```bash
-node scripts/create-invoice.js \
-  --business-id biz_123 \
-  --customer-email invoice@example.com \
-  --line-items '[{"description":"Service","quantity":1,"unit_price":5000}]'
-```
-
-### Generate Payment Link
-
-```bash
-node scripts/generate-payment-link.js --invoice-id inv_xyz789
-```
+Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` pointing at `…/api`.
 
 ---
 
@@ -79,9 +68,9 @@ node scripts/generate-payment-link.js --invoice-id inv_xyz789
 
 ### How It Works
 
-1. **Register agent** → Get public/secret key pair
-2. **Store credentials** → Saved in `.env` (gitignored)
-3. **All scripts use keys automatically** → No manual auth needed
+1. **Discover routes** → `node scripts/clawprint` (GET `/api/products`)
+2. **Store credentials** → Put `CLAWPRINT_API_KEY` in `.env` when you have them (gitignored)
+3. **CLI uses `.env`** → `clawprint` sends `Authorization: Bearer …` unless you pass `--no-auth`
 
 ### Manual API Calls
 
@@ -91,15 +80,9 @@ curl -H "Authorization: Bearer $API_KEY" \
   http://localhost:3000/api/businesses
 ```
 
-### Multiple Agents
+### Multiple keys
 
-```bash
-# Register different agent
-node scripts/setup-agent.js --email agent2@example.com
-
-# This updates .env
-# Old key stops working
-```
+Use different `.env` files or `--api-key` on the CLI for alternate credentials; only one `CLAWPRINT_API_KEY` is read from the environment per process.
 
 ---
 
@@ -112,21 +95,18 @@ Ensure the Clawprint API is running on `http://localhost:3000/api` in another te
 ### "API key not found"
 
 ```bash
-# Re-register
-node scripts/setup-agent.js --email your-email@example.com
+# Add credentials to .env (when your deployment provides them)
+# CLAWPRINT_API_KEY=pk_xxx:sk_xxx
 
-# Verify .env has credentials
 cat .env
 ```
 
-### Tests failing
+### Catalog request fails
 
 ```bash
-# Check API is running
-curl http://localhost:3000/api/health
-
-# Run tests again
-node scripts/test-auth.js
+# Confirm base URL and reachability
+node scripts/clawprint
+# or: curl -sS "$CLAWPRINT_SITE_URL/api/products"
 ```
 
 ---
@@ -135,8 +115,8 @@ node scripts/test-auth.js
 
 - Read **README.md** for overview
 - Check **REFERENCE.md** for full API docs
-- Run tests to verify everything works
+- Use `node scripts/clawprint` to confirm the API responds
 
 ---
 
-**Ready?** Start with: `node scripts/setup-agent.js --email your@email.com`
+**Ready?** Start with: `node scripts/clawprint` and follow the catalog.
