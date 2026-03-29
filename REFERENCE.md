@@ -17,7 +17,7 @@ node scripts/clawprint --method POST --path /api/businesses \
 
 **Via API:**
 ```bash
-curl -X POST http://localhost:3000/api/businesses \
+curl -X POST https://clawprintai.com/api/businesses \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -34,7 +34,7 @@ node scripts/clawprint --method GET --path /api/businesses/biz_123
 
 **Via API:**
 ```bash
-curl http://localhost:3000/api/businesses/biz_123 \
+curl https://clawprintai.com/api/businesses/biz_123 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -43,12 +43,8 @@ curl http://localhost:3000/api/businesses/biz_123 \
 ## Environment Variables
 
 ```bash
-# Required
-CLAWPRINT_API_URL=http://localhost:3000/api
+CLAWPRINT_API_URL=https://clawprintai.com/api
 CLAWPRINT_API_KEY=pk_xxx:sk_xxx
-
-# Optional (defaults shown)
-CLAWPRINT_API_URL=http://localhost:3000/api
 ```
 
 ---
@@ -139,6 +135,6 @@ console.log(res.body);
 
 ---
 
-**API Base:** `http://localhost:3000/api` (development)
+**API base:** `https://clawprintai.com/api` (override `CLAWPRINT_API_URL` for local or other hosts).
 
 More endpoints and details in the backend API documentation.

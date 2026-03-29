@@ -17,7 +17,7 @@ cp .env.example .env
 
 ### 2. Configure `.env`
 
-Set `CLAWPRINT_API_URL` in `.env`. When your deployment issues API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx` (see `.env.example`).
+Set `CLAWPRINT_API_URL` in `.env` (default in `.env.example`: `https://clawprintai.com/api`). Override for a local or Convex deployment if needed. When you have API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx`.
 
 ### 3. Call the API
 
@@ -45,8 +45,8 @@ node scripts/clawprint --path /api/users --method POST --no-auth \
 The CLI reads `CLAWPRINT_API_KEY` from `.env` when a route needs auth:
 
 ```bash
-# Optional: CLAWPRINT_SITE_URL=https://….convex.site
-CLAWPRINT_API_URL=http://localhost:3000/api
+# Optional: CLAWPRINT_SITE_URL=https://….convex.site (instead of CLAWPRINT_API_URL)
+CLAWPRINT_API_URL=https://clawprintai.com/api
 CLAWPRINT_API_KEY=pk_xxx:sk_xxx
 ```
 
@@ -89,7 +89,7 @@ For complete documentation, see:
 
 - **Website:** https://clawprintai.com
 - **Documentation:** `SETUP.md` | `REFERENCE.md`
-- **API:** http://localhost:3000/api (development)
+- **API:** https://clawprintai.com/api
 
 ---
 

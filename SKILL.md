@@ -15,7 +15,7 @@ Form Wyoming DAO LLCs for AI agents. Each agent gets a legal business entity wit
 
 **Always call the products endpoint first** using the skill’s CLI (that is the default behavior when you pass no flags).
 
-1. **Set the base URL** in `.env` (see `.env.example`): `CLAWPRINT_SITE_URL` (deployment origin, e.g. Convex) or `CLAWPRINT_API_URL` (root ending in `/api`).
+1. **Set the base URL** in `.env` (see `.env.example`): `CLAWPRINT_SITE_URL` (deployment origin, e.g. Convex) or `CLAWPRINT_API_URL` (default `https://clawprintai.com/api`).
 2. **From the `clawprint-skill` directory, run with no arguments** — this performs `GET /api/products` and prints the **products** list (JSON array) on stdout:
 
 ```bash

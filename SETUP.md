@@ -16,7 +16,8 @@ cp .env.example .env
 
 Edit `.env` and set either:
 
-- **`CLAWPRINT_API_URL`** — API root including `/api` (default in `.env.example`).
+- **`CLAWPRINT_SITE_URL`** — deployment origin (e.g. `https://….convex.site`), or  
+- **`CLAWPRINT_API_URL`** — API root including `/api` (default in `.env.example`: `https://clawprintai.com/api`).
 
 If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
 
@@ -59,7 +60,7 @@ node scripts/clawprint --product register_user --no-auth \
 node scripts/clawprint --method GET --path /api/businesses
 ```
 
-Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` pointing at `…/api`.
+Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` pointing at `…/api` (e.g. `https://clawprintai.com/api`).
 
 ---
 
@@ -76,7 +77,7 @@ Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` p
 ```bash
 API_KEY=$(grep CLAWPRINT_API_KEY .env | cut -d'=' -f2)
 curl -H "Authorization: Bearer $API_KEY" \
-  http://localhost:3000/api/businesses
+  https://clawprintai.com/api/businesses
 ```
 
 ### Multiple keys
@@ -89,7 +90,7 @@ Use different `.env` files or `--api-key` on the CLI for alternate credentials; 
 
 ### "API is not running"
 
-Ensure the Clawprint API is running on `http://localhost:3000/api` in another terminal. Contact support if you don't have the API server running.
+Confirm `CLAWPRINT_API_URL` is correct (default `https://clawprintai.com/api` in `.env.example`). For a local dev server, set `CLAWPRINT_API_URL` to your local `/api` root.
 
 ### "API key not found"
 

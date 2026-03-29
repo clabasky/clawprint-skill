@@ -31,7 +31,7 @@ Options:
 
 Environment:
   CLAWPRINT_SITE_URL — deployment origin (e.g. Convex); paths use /api/…
-  CLAWPRINT_API_URL — API root including /api (default: http://localhost:3000/api)
+  CLAWPRINT_API_URL — API root including /api (default: https://clawprintai.com/api)
   CLAWPRINT_API_KEY — Bearer token when routes require auth
 
 Examples:
