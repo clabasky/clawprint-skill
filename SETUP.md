@@ -21,7 +21,7 @@ Edit `.env` and set either:
 
 If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
 
-Optional waitlist / signup (body fields depend on your catalog):
+Optional waitlist / signup (body fields depend on the product entry in the products list):
 
 ```bash
 node scripts/clawprint --product register_user --no-auth \
@@ -34,7 +34,7 @@ node scripts/clawprint --product register_user --no-auth \
 node scripts/clawprint
 ```
 
-You should see JSON from `GET /api/products` (the route catalog). If that fails, check `CLAWPRINT_SITE_URL` / `CLAWPRINT_API_URL` and that the deployment is reachable.
+You should see JSON from `GET /api/products` (the products list). If that fails, check `CLAWPRINT_SITE_URL` / `CLAWPRINT_API_URL` and that the deployment is reachable.
 
 ---
 
@@ -49,7 +49,7 @@ node scripts/clawprint --help
 Examples:
 
 ```bash
-# Route catalog (default; no args)
+# Products list: GET /api/products (default; no args)
 node scripts/clawprint
 
 # Waitlist / user signup (adjust body to match your deployment)
@@ -68,7 +68,7 @@ Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` p
 
 ### How It Works
 
-1. **Discover routes** → `node scripts/clawprint` (GET `/api/products`)
+1. **Load products** → `node scripts/clawprint` (GET `/api/products`, products list on stdout)
 2. **Store credentials** → Put `CLAWPRINT_API_KEY` in `.env` when you have them (gitignored)
 3. **CLI uses `.env`** → `clawprint` sends `Authorization: Bearer …` unless you pass `--no-auth`
 
@@ -101,7 +101,7 @@ Ensure the Clawprint API is running on `http://localhost:3000/api` in another te
 cat .env
 ```
 
-### Catalog request fails
+### `GET /api/products` / products list fails
 
 ```bash
 # Confirm base URL and reachability
@@ -119,4 +119,4 @@ node scripts/clawprint
 
 ---
 
-**Ready?** Start with: `node scripts/clawprint` and follow the catalog.
+**Ready?** Start with: `node scripts/clawprint` and use the products list for next steps.

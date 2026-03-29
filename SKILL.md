@@ -1,4 +1,9 @@
-
+---
+name: clawprint
+description: |
+  Create Delaware LLCs for AI agents with human sponsor oversight.
+  Use when an agent needs to form a legal business entity.
+---
 
 # Clawprint — LLC Formation for AI Agents
 
@@ -11,7 +16,7 @@ Form Wyoming DAO LLCs for AI agents. Each agent gets a legal business entity wit
 **Always call the products endpoint first** using the skill’s CLI (that is the default behavior when you pass no flags).
 
 1. **Set the base URL** in `.env` (see `.env.example`): `CLAWPRINT_SITE_URL` (deployment origin, e.g. Convex) or `CLAWPRINT_API_URL` (root ending in `/api`).
-2. **From the `clawprint-skill` directory, run with no arguments** — this performs `GET /api/products` and prints the catalog as JSON on stdout:
+2. **From the `clawprint-skill` directory, run with no arguments** — this performs `GET /api/products` and prints the **products** list (JSON array) on stdout:
 
 ```bash
 node scripts/clawprint
@@ -20,7 +25,7 @@ node scripts/clawprint
 Equivalent: `npm run clawprint` (runs `scripts/clawprint.js`). No auth header is sent for this call.
 
 3. **Parse the JSON array** — each entry includes `id`, `method`, `path`, `description`, and `agent_integration` (auth, headers, body, steps).
-4. **Issue later calls with the same script** — `--product <id>` (loads the catalog to resolve method/path) or explicit `--method` / `--path`, matching the catalog. Use `CLAWPRINT_API_KEY` from `.env` when a route requires auth, unless you pass `--no-auth` or `--api-key`.
+4. **Issue later calls with the same script** — `--product <id>` (fetches `GET /api/products` again to resolve method/path) or explicit `--method` / `--path`, matching the products list. Use `CLAWPRINT_API_KEY` from `.env` when a route requires auth, unless you pass `--no-auth` or `--api-key`.
 
 **Without this repo**, you can hit the same URL with curl (no auth):
 
@@ -32,13 +37,13 @@ curl -sS "{origin}/api/products" -H "Accept: application/json"
 
 ## Quick Start
 
-### CLI: catalog first, then any route
+### CLI: products first, then any route
 
 ```bash
-# First call (always): products catalog on stdout
+# First call (always): GET /api/products — products list on stdout
 node scripts/clawprint
 
-# Then: by catalog id (fetches /api/products to resolve id → method/path)
+# Then: by product id (GET /api/products to resolve id → method/path)
 node scripts/clawprint --product register_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 
@@ -49,13 +54,13 @@ node scripts/clawprint --method POST --path /api/users --no-auth \
 
 ### Create a Business
 
-After `node scripts/clawprint` (catalog), call the `POST /businesses` route (or the matching catalog entry) via the CLI with `--path` / `--product` and a JSON `--body` that includes `legal_name`, `sponsor_email`, and any other fields the catalog describes.
+After `node scripts/clawprint` (products list), call the `POST /businesses` route (or the matching product entry’s `path`) via the CLI with `--path` / `--product` and a JSON `--body` that includes `legal_name`, `sponsor_email`, and any other fields that product’s `agent_integration` describes.
 
 The sponsor receives an email to verify identity (one-time KYC).
 
 ### Check Status
 
-From the same script, use `GET /businesses/:id/status` (or the catalog id for that route): `--method GET`, `--path`, and optional `--query`.
+From the same script, use `GET /businesses/:id/status` (or the matching product id from the products list): `--method GET`, `--path`, and optional `--query`.
 
 ---
 

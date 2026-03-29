@@ -2,7 +2,7 @@
 'use strict';
 
 /**
- * Unified Clawprint API CLI — discovery-first, then any catalog route.
+ * Unified Clawprint API CLI — discovery via GET /api/products, then any documented route.
  *
  * Usage:
  *   node scripts/clawprint.js
@@ -17,12 +17,12 @@ const { buildClawprintUrl, clawprintRequest } = require('../lib/clawprint-http')
 function printHelp() {
   console.log(`Clawprint API CLI
 
-Default (no args): GET /api/products — fetch the route catalog (no auth).
+Default (no args): GET /api/products — fetch the products list (no auth).
 
 Options:
   --method METHOD     HTTP method (default: GET)
-  --path PATH         Path as in the catalog, e.g. /api/users or /api/products
-  --product ID        Use method + path from catalog entry with this id (fetches /api/products first)
+  --path PATH         Path as listed in the products response, e.g. /api/users or /api/products
+  --product ID        Resolve method + path from the products list entry with this id (GET /api/products first)
   --query STRING      Query string without "?", appended to path
   --body JSON         JSON body (string). Use @file.json to read from file
   --no-auth           Do not send Authorization header
@@ -30,6 +30,7 @@ Options:
   -h, --help          Show this help
 
 Environment:
+  CLAWPRINT_SITE_URL — deployment origin (e.g. Convex); paths use /api/…
   CLAWPRINT_API_URL — API root including /api (default: http://localhost:3000/api)
   CLAWPRINT_API_KEY — Bearer token when routes require auth
 
@@ -109,7 +110,7 @@ function parseArgs(argv) {
   return opts;
 }
 
-async function loadCatalog() {
+async function loadProducts() {
   const url = buildClawprintUrl('/api/products');
   const res = await clawprintRequest({
     method: 'GET',
@@ -148,13 +149,13 @@ async function run(opts) {
   let path = opts.path;
 
   if (opts.product) {
-    const catalog = await loadCatalog();
-    if (!Array.isArray(catalog)) {
+    const products = await loadProducts();
+    if (!Array.isArray(products)) {
       throw new Error('GET /api/products did not return an array');
     }
-    const entry = catalog.find((e) => e && e.id === opts.product);
+    const entry = products.find((e) => e && e.id === opts.product);
     if (!entry) {
-      const ids = catalog.map((e) => e.id).filter(Boolean);
+      const ids = products.map((e) => e.id).filter(Boolean);
       throw new Error(
         `Unknown product id "${opts.product}". Known ids: ${ids.join(', ') || '(none)'}`,
       );

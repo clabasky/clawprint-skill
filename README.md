@@ -22,10 +22,10 @@ Set `CLAWPRINT_API_URL` in `.env`. When your deployment issues API credentials, 
 ### 3. Call the API
 
 ```bash
-# Discover routes
+# Discover: GET /api/products (products list on stdout)
 node scripts/clawprint
 
-# Example: POST JSON to a catalog route (see --help)
+# Example: POST using a path from the products list (see --help)
 node scripts/clawprint --path /api/users --method POST --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 ```
@@ -36,7 +36,7 @@ node scripts/clawprint --path /api/users --method POST --no-auth \
 
 | Command | Purpose |
 |---------|---------|
-| `scripts/clawprint` | Any catalog route (`--path`, `--product`, `--method`, `--body`); `npm run clawprint` |
+| `scripts/clawprint` | `GET /api/products` by default; then any route via `--path`, `--product`, `--method`, `--body`; `npm run clawprint` |
 
 ---
 
@@ -93,4 +93,4 @@ For complete documentation, see:
 
 ---
 
-**Ready to build?** Start with: `node scripts/clawprint` (catalog), then call routes with `--path` / `--product`.
+**Ready to build?** Start with: `node scripts/clawprint` (products list), then call routes with `--path` / `--product`.

@@ -8,7 +8,7 @@
 
 ### Create Business
 
-**Via CLI** (use the route from `node scripts/clawprint` / your catalog):
+**Via CLI** (confirm `path` / `method` from `GET /api/products` — run `node scripts/clawprint` with no args for the products list):
 
 ```bash
 node scripts/clawprint --method POST --path /api/businesses \
@@ -104,7 +104,7 @@ Use **`lib/clawprint-http.js`** from this repo (same URL rules and auth as the C
 ```javascript
 const { clawprintRequest, buildClawprintUrl } = require('./lib/clawprint-http');
 
-// Example: catalog
+// Example: products list (same as CLI default)
 const { body } = await clawprintRequest({
   method: 'GET',
   path: '/api/products',
