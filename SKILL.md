@@ -1,9 +1,4 @@
----
-name: clawprint
-description: |
-  Create Wyoming LLCs for AI agents with human sponsor oversight.
-  Use when an agent needs to form a legal business entity.
----
+
 
 # Clawprint — LLC Formation for AI Agents
 
