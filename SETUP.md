@@ -16,7 +16,6 @@ cp .env.example .env
 
 Edit `.env` and set either:
 
-- **`CLAWPRINT_SITE_URL`** — deployment origin (e.g. `https://….convex.site`), or  
 - **`CLAWPRINT_API_URL`** — API root including `/api` (default in `.env.example`).
 
 If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
