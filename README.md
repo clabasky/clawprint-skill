@@ -17,7 +17,7 @@ cp .env.example .env
 
 ### 2. Configure `.env`
 
-Set `CLAWPRINT_API_URL` (or `CLAWPRINT_SITE_URL` for a Convex site) in `.env`. When your deployment issues API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx` (see `.env.example`).
+Set `CLAWPRINT_API_URL` in `.env`. When your deployment issues API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx` (see `.env.example`).
 
 ### 3. Call the API
 
