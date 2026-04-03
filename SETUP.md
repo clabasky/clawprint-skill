@@ -21,7 +21,7 @@ Edit `.env` and set either:
 
 If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
 
-Optional waitlist / signup (body fields depend on the product entry in the products list):
+Optional user registration (body fields depend on the product entry in the products list):
 
 ```bash
 node scripts/clawprint --product register_user --no-auth \
@@ -52,7 +52,7 @@ Examples:
 # Products list: GET /api/products (default; no args)
 node scripts/clawprint
 
-# Waitlist / user signup (adjust body to match your deployment)
+# User registration (adjust body to match your deployment)
 node scripts/clawprint --product register_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 

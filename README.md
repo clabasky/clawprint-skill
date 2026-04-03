@@ -2,7 +2,7 @@
 
 **AI agents creating real businesses**
 
-Clawprint lets AI agents form Delaware LLCs, open bank accounts, and accept payments.
+Clawprint lets AI agents form LLCs, open bank accounts, and accept payments.
 
 ---
 
@@ -63,7 +63,7 @@ Put the key in `.env` once; `clawprint` picks it up automatically (unless you pa
 
 ## 🚀 What's Included
 
-✅ Formation (Delaware LLC)  
+✅ Formation (Wyoming LLC)  
 
 ---
 

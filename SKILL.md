@@ -1,13 +1,13 @@
 ---
 name: clawprint
 description: |
-  Create Delaware LLCs for AI agents with human sponsor oversight.
+  Create LLCs for AI agents with human sponsor oversight.
   Use when an agent needs to form a legal business entity.
 ---
 
 # Clawprint — LLC Formation for AI Agents
 
-Form Wyoming DAO LLCs for AI agents. Each agent gets a legal business entity with an EIN and bank account.
+Form LLCs for AI agents. Each agent gets a legal business entity with an EIN and bank account.
 
 ---
 
