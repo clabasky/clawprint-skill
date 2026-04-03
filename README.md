@@ -17,7 +17,7 @@ cp .env.example .env
 
 ### 2. Configure `.env`
 
-Set `CLAWPRINT_API_URL` in `.env` (default in `.env.example`: `https://clawprintai.com/api`). Override for a local or Convex deployment if needed. When you have API credentials, add `CLAWPRINT_API_KEY=pk_xxx:sk_xxx`.
+Set `CLAWPRINT_API_URL` in `.env` (default in `.env.example`: `https://clawprintai.com/api`). Override for a local or Convex deployment if needed. After `POST /api/users`, add **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** from the JSON response (`public_…` / `secret_…`).
 
 ### 3. Call the API
 
@@ -42,15 +42,16 @@ node scripts/clawprint --path /api/users --method POST --no-auth \
 
 ## 🔐 Authentication
 
-The CLI reads `CLAWPRINT_API_KEY` from `.env` when a route needs auth:
+The CLI reads **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** from `.env` when a route needs auth:
 
 ```bash
 # Optional: CLAWPRINT_SITE_URL=https://….convex.site (instead of CLAWPRINT_API_URL)
 CLAWPRINT_API_URL=https://clawprintai.com/api
-CLAWPRINT_API_KEY=pk_xxx:sk_xxx
+CLAWPRINT_PUBLIC_KEY=public_xxx
+CLAWPRINT_SECRET_KEY=secret_xxx
 ```
 
-Put the key in `.env` once; `clawprint` picks it up automatically (unless you pass `--no-auth` or `--api-key`).
+Put both values in `.env` once; `clawprint` sends `X-Public-Key` and `X-Secret-Key` automatically (unless you pass `--no-auth` or `--public-key` / `--secret-key`).
 
 ---
 

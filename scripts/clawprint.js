@@ -7,8 +7,8 @@
  * Usage:
  *   node scripts/clawprint.js
  *   node scripts/clawprint.js --path /api/users --method POST --body '{"email":"a@b.com","display_name":"x"}'
- *   node scripts/clawprint.js --product register_user --body '{"email":"a@b.com","display_name":"x"}'
- *   node scripts/clawprint.js --path /api/businesses/biz_123/status --api-key 'pk:sk'
+ *   node scripts/clawprint.js --product create_user --body '{"email":"a@b.com","display_name":"x"}'
+ *   node scripts/clawprint.js --path /api/businesses/biz_123/status --public-key 'public_…' --secret-key 'secret_…'
  */
 
 const fs = require('fs');
@@ -25,14 +25,16 @@ Options:
   --product ID        Resolve method + path from the products list entry with this id (GET /api/products first)
   --query STRING      Query string without "?", appended to path
   --body JSON         JSON body (string). Use @file.json to read from file
-  --no-auth           Do not send Authorization header
-  --api-key KEY       Override CLAWPRINT_API_KEY for this request
+  --no-auth           Do not send X-Public-Key / X-Secret-Key
+  --public-key KEY    Override CLAWPRINT_PUBLIC_KEY for this request
+  --secret-key KEY    Override CLAWPRINT_SECRET_KEY for this request
   -h, --help          Show this help
 
 Environment:
   CLAWPRINT_SITE_URL — deployment origin (e.g. Convex); paths use /api/…
   CLAWPRINT_API_URL — API root including /api (default: https://clawprintai.com/api)
-  CLAWPRINT_API_KEY — Bearer token when routes require auth
+  CLAWPRINT_PUBLIC_KEY — from POST /api/users response `public_key`
+  CLAWPRINT_SECRET_KEY — from POST /api/users response `secret_key`
 
 Examples:
   node scripts/clawprint
@@ -50,7 +52,8 @@ function parseArgs(argv) {
     query: '',
     body: undefined,
     auth: true,
-    apiKey: null,
+    publicKey: null,
+    secretKey: null,
     help: false,
   };
 
@@ -86,8 +89,11 @@ function parseArgs(argv) {
       case '--body':
         take('bodyRaw');
         break;
-      case '--api-key':
-        take('apiKey');
+      case '--public-key':
+        take('publicKey');
+        break;
+      case '--secret-key':
+        take('secretKey');
         break;
       default:
         throw new Error(`Unknown argument: ${a}`);
@@ -184,7 +190,8 @@ async function run(opts) {
     url,
     body: method === 'GET' || method === 'HEAD' ? null : opts.body,
     auth: opts.auth,
-    apiKey: opts.apiKey,
+    publicKey: opts.publicKey,
+    secretKey: opts.secretKey,
   });
 
   console.log(JSON.stringify(res.body, null, 2));

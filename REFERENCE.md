@@ -12,18 +12,16 @@
 
 ```bash
 node scripts/clawprint --method POST --path /api/businesses \
-  --body '{"legal_name":"My Business LLC","sponsor_email":"sponsor@example.com"}'
+  --body '{"requested_business_name":"My Business LLC"}'
 ```
 
 **Via API:**
 ```bash
 curl -X POST https://clawprintai.com/api/businesses \
-  -H "Authorization: Bearer $API_KEY" \
+  -H "X-Public-Key: $CLAWPRINT_PUBLIC_KEY" \
+  -H "X-Secret-Key: $CLAWPRINT_SECRET_KEY" \
   -H "Content-Type: application/json" \
-  -d '{
-    "legal_name": "My Business LLC",
-    "sponsor_email": "sponsor@example.com"
-  }'
+  -d '{"requested_business_name": "My Business LLC"}'
 ```
 
 ### Get Business
@@ -35,7 +33,8 @@ node scripts/clawprint --method GET --path /api/businesses/biz_123
 **Via API:**
 ```bash
 curl https://clawprintai.com/api/businesses/biz_123 \
-  -H "Authorization: Bearer $API_KEY"
+  -H "X-Public-Key: $CLAWPRINT_PUBLIC_KEY" \
+  -H "X-Secret-Key: $CLAWPRINT_SECRET_KEY"
 ```
 
 ---
@@ -44,7 +43,9 @@ curl https://clawprintai.com/api/businesses/biz_123 \
 
 ```bash
 CLAWPRINT_API_URL=https://clawprintai.com/api
-CLAWPRINT_API_KEY=pk_xxx:sk_xxx
+# From POST /api/users — both required on protected routes.
+CLAWPRINT_PUBLIC_KEY=
+CLAWPRINT_SECRET_KEY=
 ```
 
 ---
@@ -56,7 +57,7 @@ CLAWPRINT_API_KEY=pk_xxx:sk_xxx
 | 200 | Success (GET, PATCH) |
 | 201 | Created (POST) |
 | 400 | Bad request (validation error) |
-| 401 | Unauthorized (missing/invalid API key) |
+| 401 | Unauthorized (missing/invalid public + secret key pair) |
 | 404 | Not found |
 | 409 | Conflict (duplicate email, etc.) |
 | 500 | Server error |
@@ -82,7 +83,7 @@ CLAWPRINT_API_KEY=pk_xxx:sk_xxx
 
 ## Rate Limiting
 
-Default: 100 requests/minute per API key
+Default: 100 requests/minute per credential pair
 
 Response headers:
 ```
@@ -108,21 +109,22 @@ const { body } = await clawprintRequest({
 });
 console.log(body);
 
-// Example: authenticated call
+// Example: authenticated call (uses CLAWPRINT_PUBLIC_KEY + CLAWPRINT_SECRET_KEY from env)
 const res = await clawprintRequest({
-  method: 'GET',
+  method: 'POST',
   path: '/api/businesses',
+  body: { requested_business_name: 'Example LLC' },
 });
 console.log(res.body);
 ```
 
-`clawprintRequest` reads `CLAWPRINT_API_URL` / `CLAWPRINT_SITE_URL` and `CLAWPRINT_API_KEY` from the environment unless you pass `apiKey` or `auth: false`.
+`clawprintRequest` reads `CLAWPRINT_API_URL` / `CLAWPRINT_SITE_URL`, `CLAWPRINT_PUBLIC_KEY`, and `CLAWPRINT_SECRET_KEY` from the environment unless you pass `publicKey` / `secretKey` or `auth: false`.
 
 ---
 
 ## Tips
 
-- The `clawprint` CLI uses credentials from `.env` when present (`CLAWPRINT_API_KEY`)
+- The `clawprint` CLI uses `CLAWPRINT_PUBLIC_KEY` and `CLAWPRINT_SECRET_KEY` from `.env` when present
 - Requests are logged for audit trail
 
 ---

@@ -19,7 +19,7 @@ Edit `.env` and set either:
 - **`CLAWPRINT_SITE_URL`** — deployment origin (e.g. `https://….convex.site`), or  
 - **`CLAWPRINT_API_URL`** — API root including `/api` (default in `.env.example`: `https://clawprintai.com/api`).
 
-If your deployment returns API credentials, set **`CLAWPRINT_API_KEY`** to `public_key:secret_key` (Bearer format your backend expects).
+After registration, set **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** from the `POST /api/users` response (values are prefixed `public_` and `secret_`).
 
 Optional user registration (body fields depend on the product entry in the products list):
 
@@ -56,7 +56,7 @@ node scripts/clawprint
 node scripts/clawprint --product register_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 
-# Authenticated GET (uses CLAWPRINT_API_KEY from .env)
+# Authenticated call (uses CLAWPRINT_PUBLIC_KEY + CLAWPRINT_SECRET_KEY from .env)
 node scripts/clawprint --method GET --path /api/businesses
 ```
 
@@ -69,20 +69,21 @@ Set `CLAWPRINT_SITE_URL` for a Convex site origin, or keep `CLAWPRINT_API_URL` p
 ### How It Works
 
 1. **Load products** → `node scripts/clawprint` (GET `/api/products`, products list on stdout)
-2. **Store credentials** → Put `CLAWPRINT_API_KEY` in `.env` when you have them (gitignored)
-3. **CLI uses `.env`** → `clawprint` sends `Authorization: Bearer …` unless you pass `--no-auth`
+2. **Store credentials** → Put **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** in `.env` when you have them (gitignored)
+3. **CLI uses `.env`** → `clawprint` sends **`X-Public-Key`** and **`X-Secret-Key`** unless you pass `--no-auth`
 
 ### Manual API Calls
 
 ```bash
-API_KEY=$(grep CLAWPRINT_API_KEY .env | cut -d'=' -f2)
-curl -H "Authorization: Bearer $API_KEY" \
+source .env  # or export the two vars
+curl -H "X-Public-Key: $CLAWPRINT_PUBLIC_KEY" \
+  -H "X-Secret-Key: $CLAWPRINT_SECRET_KEY" \
   https://clawprintai.com/api/businesses
 ```
 
 ### Multiple keys
 
-Use different `.env` files or `--api-key` on the CLI for alternate credentials; only one `CLAWPRINT_API_KEY` is read from the environment per process.
+Use different `.env` files or **`--public-key`** / **`--secret-key`** on the CLI for alternate credentials.
 
 ---
 
@@ -92,11 +93,12 @@ Use different `.env` files or `--api-key` on the CLI for alternate credentials; 
 
 Confirm `CLAWPRINT_API_URL` is correct (default `https://clawprintai.com/api` in `.env.example`). For a local dev server, set `CLAWPRINT_API_URL` to your local `/api` root.
 
-### "API key not found"
+### "Unauthorized" / missing credentials
 
 ```bash
-# Add credentials to .env (when your deployment provides them)
-# CLAWPRINT_API_KEY=pk_xxx:sk_xxx
+# Add both values from POST /api/users to .env
+# CLAWPRINT_PUBLIC_KEY=public_xxx
+# CLAWPRINT_SECRET_KEY=secret_xxx
 
 cat .env
 ```

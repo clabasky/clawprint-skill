@@ -13,7 +13,18 @@ Form LLCs for AI agents. Each agent gets a legal business entity with an EIN and
 
 ## HTTP API — discovery first (use the script)
 
-**Always call the products endpoint first** using the skill’s CLI (that is the default behavior when you pass no flags).
+### Authentication model
+
+1. **`GET /api/products`** — no credentials (discovery).
+2. **`POST /api/users`** — no credentials. The JSON response includes **`public_key`** and **`secret_key`**: opaque strings prefixed with **`public_`** and **`secret_`**.
+3. **Persist both** — add them to `.env` as **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** (see `.env.example`). Treat the secret like a password; do not commit real values.
+4. **Authenticated routes** (e.g. `POST /api/businesses`) — send **both** headers on every request: **`X-Public-Key`** and **`X-Secret-Key`**. The CLI reads the two env vars and sets those headers when auth is enabled (default). Use **`--no-auth`** only for discovery and user registration; use **`--public-key`** / **`--secret-key`** for one-off overrides.
+
+If either header is missing or the pair does not match a registered user, the server returns **401**.
+
+---
+
+**Discovery** — always call `GET /api/products` first using the CLI (default when you pass no flags):
 
 1. **Set the base URL** in `.env` (see `.env.example`): `CLAWPRINT_SITE_URL` (deployment origin, e.g. Convex) or `CLAWPRINT_API_URL` (default `https://clawprintai.com/api`).
 2. **From the `clawprint-skill` directory, run with no arguments** — this performs `GET /api/products` and prints the **products** list (JSON array) on stdout:
@@ -25,7 +36,7 @@ node scripts/clawprint
 Equivalent: `npm run clawprint` (runs `scripts/clawprint.js`). No auth header is sent for this call.
 
 3. **Parse the JSON array** — each entry includes `id`, `method`, `path`, `description`, and `agent_integration` (auth, headers, body, steps).
-4. **Issue later calls with the same script** — `--product <id>` (fetches `GET /api/products` again to resolve method/path) or explicit `--method` / `--path`, matching the products list. Use `CLAWPRINT_API_KEY` from `.env` when a route requires auth, unless you pass `--no-auth` or `--api-key`.
+4. **Issue later calls with the same script** — `--product <id>` (fetches `GET /api/products` again to resolve method/path) or explicit `--method` / `--path`, matching the products list. After you have registered via `POST /api/users`, set **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** in `.env` so protected calls send both key headers; use `--no-auth` or explicit `--public-key` / `--secret-key` when you intend to override that behavior.
 
 **Without this repo**, you can hit the same URL with curl (no auth):
 
@@ -43,8 +54,10 @@ curl -sS "{origin}/api/products" -H "Accept: application/json"
 # First call (always): GET /api/products — products list on stdout
 node scripts/clawprint
 
-# Then: by product id (GET /api/products to resolve id → method/path)
-node scripts/clawprint --product register_user --no-auth \
+# Register user (no auth). Response JSON includes "public_key" and "secret_key" — add to .env:
+#   CLAWPRINT_PUBLIC_KEY=public_…
+#   CLAWPRINT_SECRET_KEY=secret_…
+node scripts/clawprint --product create_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 
 # Or: explicit path
@@ -54,13 +67,13 @@ node scripts/clawprint --method POST --path /api/users --no-auth \
 
 ### Create a Business
 
-After `node scripts/clawprint` (products list), call the `POST /businesses` route (or the matching product entry’s `path`) via the CLI with `--path` / `--product` and a JSON `--body` that includes `legal_name`, `sponsor_email`, and any other fields that product’s `agent_integration` describes.
+With **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** set in `.env` (from the registration response), call `POST /api/businesses` (or the matching product id from the products list) **without** `--no-auth` so the CLI sends **`X-Public-Key`** and **`X-Secret-Key`**. Use a JSON `--body` that matches that product’s `agent_integration` (e.g. `requested_business_name` per the live products catalog).
 
 The sponsor receives an email to verify identity (one-time KYC).
 
 ### Check Status
 
-From the same script, use `GET /businesses/:id/status` (or the matching product id from the products list): `--method GET`, `--path`, and optional `--query`.
+From the same script, use `GET /businesses/:id/status` (or the matching product id from the products list): `--method GET`, `--path`, and optional `--query`. If that product’s `agent_integration` requires auth, keep **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`** in `.env` and do not pass `--no-auth`.
 
 ---
 
