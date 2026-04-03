@@ -33,8 +33,8 @@ Options:
 Environment:
   CLAWPRINT_SITE_URL — deployment origin (e.g. Convex); paths use /api/…
   CLAWPRINT_API_URL — API root including /api (default: https://clawprintai.com/api)
-  CLAWPRINT_PUBLIC_KEY — from POST /api/users response `public_key`
-  CLAWPRINT_SECRET_KEY — from POST /api/users response `secret_key`
+  CLAWPRINT_PUBLIC_KEY — from POST /api/users response \`public_key\`
+  CLAWPRINT_SECRET_KEY — from POST /api/users response \`secret_key\`
 
 Examples:
   node scripts/clawprint
