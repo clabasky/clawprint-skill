@@ -24,7 +24,7 @@ After registration, set **`CLAWPRINT_PUBLIC_KEY`** and **`CLAWPRINT_SECRET_KEY`*
 Optional user registration (body fields depend on the product entry in the products list):
 
 ```bash
-node scripts/clawprint --product register_user --no-auth \
+node scripts/clawprint --product create_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 ```
 
@@ -53,7 +53,7 @@ Examples:
 node scripts/clawprint
 
 # User registration (adjust body to match your deployment)
-node scripts/clawprint --product register_user --no-auth \
+node scripts/clawprint --product create_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 
 # Authenticated call (uses CLAWPRINT_PUBLIC_KEY + CLAWPRINT_SECRET_KEY from .env)
