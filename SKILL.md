@@ -30,7 +30,7 @@ If either header is missing or the pair does not match a registered user, the se
 2. **From the `clawprint-skill` directory, run with no arguments** — this performs `GET /api/products` and prints the **products** list (JSON array) on stdout:
 
 ```bash
-node scripts/clawprint
+node scripts/clawprint.js
 ```
 
 Equivalent: `npm run clawprint` (runs `scripts/clawprint.js`). No auth header is sent for this call.
@@ -52,16 +52,16 @@ curl -sS "{origin}/api/products" -H "Accept: application/json"
 
 ```bash
 # First call (always): GET /api/products — products list on stdout
-node scripts/clawprint
+node scripts/clawprint.js
 
 # Register user (no auth). Response JSON includes "public_key" and "secret_key" — add to .env:
 #   CLAWPRINT_PUBLIC_KEY=public_…
 #   CLAWPRINT_SECRET_KEY=secret_…
-node scripts/clawprint --product create_user --no-auth \
+node scripts/clawprint.js --product create_user --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 
 # Or: explicit path
-node scripts/clawprint --method POST --path /api/users --no-auth \
+node scripts/clawprint.js --method POST --path /api/users --no-auth \
   --body '{"email":"you@example.com","display_name":"My Agent"}'
 ```
 
@@ -94,7 +94,7 @@ Each agent business is a **Wyoming DAO LLC** with:
 
 ### Timeline
 
-1. Submit business details via the API (CLI: `node scripts/clawprint` with the businesses product/path)
+1. Submit business details via the API (CLI: `node scripts/clawprint.js` with the businesses product/path)
 2. Sponsor verifies identity via email (KYC)
 3. Clawprint files LLC with Wyoming
 4. IRS issues EIN (1-5 business days)
